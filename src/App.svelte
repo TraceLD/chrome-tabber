@@ -1,23 +1,13 @@
 <script lang="ts">
   import Fuse from "fuse.js";
-  import type { RangeTuple } from "fuse.js";
-
-  interface TabEntry {
-    id: number;
-    windowId: number;
-    title: string;
-    url: string;
-    favIconUrl?: string;
-  }
+  import type { TabEntry, FuseResultWithMatches } from "./lib/types";
+  import SearchInput from "./SearchInput.svelte";
+  import TabItem from "./TabItem.svelte";
 
   let query = $state("");
   let selectedIndex = $state(0);
   let tabs = $state<TabEntry[]>([]);
   let fuse = $state<Fuse<TabEntry> | null>(null);
-  type FuseResultWithMatches = {
-    item: TabEntry;
-    matches?: readonly Fuse.FuseResultMatch[] | undefined;
-  };
 
   let results: FuseResultWithMatches[] = $derived.by(() => {
     if (!fuse) return tabs.map((item) => ({ item, matches: undefined }));
@@ -27,7 +17,7 @@
   });
 
   $effect(() => {
-    void query; // track query changes to reset selection
+    void query;
     selectedIndex = 0;
   });
 
@@ -49,47 +39,6 @@
     }
     loadTabs();
   });
-
-  function scrollIfSelected(node: HTMLLIElement, isSelected: boolean) {
-    if (isSelected) node.scrollIntoView({ block: "nearest" });
-    return {
-      update(isSelected: boolean) {
-        if (isSelected) node.scrollIntoView({ block: "nearest" });
-      },
-    };
-  }
-
-  function escapeHtml(s: string): string {
-    return s
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
-  function highlightMatches(
-    text: string,
-    indices: readonly RangeTuple[] | undefined,
-  ): string {
-    if (!indices) return escapeHtml(text);
-
-    const chars = [...text];
-    const highlighted = new Set<number>();
-    for (const [start, end] of indices) {
-      for (let i = start; i <= end; i++) highlighted.add(i);
-    }
-
-    let result = "";
-    for (let i = 0; i < chars.length; i++) {
-      const escaped = escapeHtml(chars[i]);
-      if (highlighted.has(i)) {
-        result += `<span class="text-amber-300 font-semibold">${escaped}</span>`;
-      } else {
-        result += escaped;
-      }
-    }
-    return result;
-  }
 
   function switchToTab(tab: TabEntry) {
     chrome.tabs.update(tab.id, { active: true });
@@ -114,15 +63,7 @@
   }
 </script>
 
-<!-- svelte-ignore a11y_autofocus -->
-<input
-  type="text"
-  placeholder="Search tabs..."
-  autofocus
-  bind:value={query}
-  onkeydown={onKeydown}
-  class="w-full px-3.5 py-3 text-sm border-none outline-none bg-[#181825] text-gray-200 border-b border-[#313244] placeholder:text-gray-500"
-/>
+<SearchInput bind:value={query} {onKeydown} />
 
 <ul
   role="listbox"
@@ -132,36 +73,11 @@
     <li class="px-3.5 py-5 text-center text-gray-500">No matching tabs</li>
   {:else}
     {#each results as result, i}
-      {@const tab = result.item}
-      {@const titleMatch = result.matches?.find((m) => m.key === "title")}
-      {@const urlMatch = result.matches?.find((m) => m.key === "url")}
-      {@const titleHtml = highlightMatches(tab.title, titleMatch?.indices)}
-      {@const urlHtml = highlightMatches(tab.url, urlMatch?.indices)}
-      <button
-        type="button"
-        role="option"
-        aria-selected={i === selectedIndex}
-        tabindex="-1"
-        use:scrollIfSelected={i === selectedIndex}
-        class="flex w-full items-center gap-2.5 px-3.5 py-2 cursor-pointer border-b border-[#252536] hover:bg-[#2a2a3c] bg-transparent border-none text-left text-inherit text-sm {i === selectedIndex ? 'bg-[#313244]' : ''}"
-        onclick={() => switchToTab(tab)}
-      >
-        {#if tab.favIconUrl}
-          <img
-            class="w-4 h-4 shrink-0 rounded-sm"
-            src={tab.favIconUrl}
-            alt=""
-          />
-        {:else}
-          <div class="w-4 h-4 shrink-0"></div>
-        {/if}
-        <div class="min-w-0 flex-1">
-          <div class="truncate text-[#cdd6f4]">{@html titleHtml}</div>
-          <div class="truncate text-[11px] text-gray-500 mt-px">
-            {@html urlHtml}
-          </div>
-        </div>
-      </button>
+      <TabItem
+        {result}
+        selected={i === selectedIndex}
+        onclick={() => switchToTab(result.item)}
+      />
     {/each}
   {/if}
 </ul>
