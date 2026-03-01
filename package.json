@@ -7,7 +7,8 @@
     "dev": "vite build --watch",
     "lint": "bunx oxlint src/",
     "fmt": "bunx prettier --write src/",
-    "fmt:check": "bunx prettier --check src/"
+    "fmt:check": "bunx prettier --check src/",
+    "lint:fmt": "bunx oxlint src/ && bunx prettier --check src/"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
