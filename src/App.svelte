@@ -87,7 +87,9 @@
   class="list-none max-h-[472px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#333_transparent]"
 >
   {#if results.length === 0}
-    <li class="px-3.5 py-8 text-center text-[#555] text-[13px]">No matching tabs</li>
+    <li class="px-3.5 py-8 text-center text-[#555] text-[13px]">
+      No matching tabs
+    </li>
   {:else}
     {#each results as result, i}
       <TabItem

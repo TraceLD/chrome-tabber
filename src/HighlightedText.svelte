@@ -31,5 +31,10 @@
   });
 </script>
 
-{#each segments as segment}{#if segment.highlighted}<span
-      class="text-[#5b9ef5] font-medium">{segment.value}</span>{:else}{segment.value}{/if}{/each}
+{#each segments as segment}
+  {#if segment.highlighted}
+    <span class="text-[#5b9ef5] font-medium">{segment.value}</span>
+  {:else}
+    {segment.value}
+  {/if}
+{/each}

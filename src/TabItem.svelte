@@ -27,8 +27,12 @@
   }
 
   let tab = $derived(result.item);
-  let titleIndices = $derived(result.matches?.find((m) => m.key === "title")?.indices);
-  let urlIndices = $derived(result.matches?.find((m) => m.key === "url")?.indices);
+  let titleIndices = $derived(
+    result.matches?.find((m) => m.key === "title")?.indices,
+  );
+  let urlIndices = $derived(
+    result.matches?.find((m) => m.key === "url")?.indices,
+  );
 </script>
 
 <button

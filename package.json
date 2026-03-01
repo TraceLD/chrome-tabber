@@ -6,15 +6,16 @@
     "build": "vite build",
     "dev": "vite build --watch",
     "lint": "bunx oxlint src/",
-    "fmt": "bunx oxfmt src/",
-    "fmt:check": "bunx oxfmt --check src/"
+    "fmt": "bunx prettier --write src/",
+    "fmt:check": "bunx prettier --check src/"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@tailwindcss/vite": "^4.2.1",
     "@types/chrome": "^0.1.37",
-    "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-svelte": "^3.5.0",
     "tailwindcss": "^4.2.1",
     "vite": "^7.3.1"
   },
