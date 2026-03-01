@@ -28,7 +28,7 @@
     autofocus
     bind:value
     onkeydown={onKeydown}
-    class="w-full pl-10 pr-4 py-3.5 text-[13px] border-none outline-none bg-transparent text-[#e2e0dc] placeholder:text-[#555] tracking-wide"
+    class="w-full pl-10 pr-4 py-3.5 text-base border-none outline-none bg-transparent text-[#e2e0dc] placeholder:text-[#555] tracking-wide"
   />
   {#if value}
     <button

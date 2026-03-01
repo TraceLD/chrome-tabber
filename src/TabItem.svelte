@@ -41,7 +41,7 @@
   aria-selected={selected}
   tabindex="-1"
   use:scrollIfSelected={selected}
-  class="group flex w-full items-center gap-3 px-3.5 py-2.5 cursor-pointer border-none text-left text-inherit text-sm relative transition-colors duration-100
+  class="group flex w-full items-center gap-3 px-3.5 py-2.5 cursor-pointer border-none text-left text-inherit text-base relative transition-colors duration-100
     {selected ? 'bg-[#242424]' : 'bg-transparent hover:bg-[#1e1e1e]'}"
   {onclick}
 >
@@ -52,10 +52,10 @@
   <Favicon url={tab.favIconUrl} />
 
   <div class="min-w-0 flex-1">
-    <div class="truncate text-[13px] text-[#d4d0c8] leading-snug">
+    <div class="truncate text-base text-[#d4d0c8] leading-snug">
       <HighlightedText text={tab.title} indices={titleIndices} />
     </div>
-    <div class="truncate text-[11px] text-[#5a5a5a] mt-0.5 leading-snug">
+    <div class="truncate text-sm text-[#5a5a5a] mt-0.5 leading-snug">
       <HighlightedText text={tab.url} indices={urlIndices} />
     </div>
   </div>
