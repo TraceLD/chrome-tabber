@@ -70,6 +70,10 @@
       e.preventDefault();
       const entry = results[selectedIndex];
       if (entry) switchToTab(entry.item);
+    } else if (e.ctrlKey && e.key === "Backspace") {
+      e.preventDefault();
+      const entry = results[selectedIndex];
+      if (entry) closeTab(entry.item);
     } else if (e.key === "Escape") {
       window.close();
     }
