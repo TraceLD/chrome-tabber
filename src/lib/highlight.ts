@@ -24,7 +24,7 @@ export function highlightMatches(
   for (let i = 0; i < chars.length; i++) {
     const escaped = escapeHtml(chars[i]);
     if (highlighted.has(i)) {
-      result += `<span class="text-amber-300 font-semibold">${escaped}</span>`;
+      result += `<span class="text-[#5b9ef5] font-medium">${escaped}</span>`;
     } else {
       result += escaped;
     }

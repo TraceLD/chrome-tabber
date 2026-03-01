@@ -46,6 +46,19 @@
     window.close();
   }
 
+  function closeTab(tab: TabEntry) {
+    chrome.tabs.remove(tab.id);
+    tabs = tabs.filter((t) => t.id !== tab.id);
+    fuse = new Fuse(tabs, {
+      keys: ["title", "url"],
+      threshold: 0.4,
+      includeMatches: true,
+    });
+    if (selectedIndex >= results.length - 1) {
+      selectedIndex = Math.max(0, results.length - 2);
+    }
+  }
+
   function onKeydown(e: KeyboardEvent) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -67,16 +80,17 @@
 
 <ul
   role="listbox"
-  class="list-none max-h-[412px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#45475a_transparent]"
+  class="list-none max-h-[472px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#333_transparent]"
 >
   {#if results.length === 0}
-    <li class="px-3.5 py-5 text-center text-gray-500">No matching tabs</li>
+    <li class="px-3.5 py-8 text-center text-[#555] text-[13px]">No matching tabs</li>
   {:else}
     {#each results as result, i}
       <TabItem
         {result}
         selected={i === selectedIndex}
         onclick={() => switchToTab(result.item)}
+        onclose={() => closeTab(result.item)}
       />
     {/each}
   {/if}
