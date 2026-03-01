@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { highlightMatches } from "./lib/highlight";
   import type { FuseResultWithMatches } from "./lib/types";
   import Favicon from "./Favicon.svelte";
   import CloseButton from "./CloseButton.svelte";
   import SelectionIndicator from "./SelectionIndicator.svelte";
+  import HighlightedText from "./HighlightedText.svelte";
 
   let {
     result,
@@ -27,10 +27,8 @@
   }
 
   let tab = $derived(result.item);
-  let titleMatch = $derived(result.matches?.find((m) => m.key === "title"));
-  let urlMatch = $derived(result.matches?.find((m) => m.key === "url"));
-  let titleHtml = $derived(highlightMatches(tab.title, titleMatch?.indices));
-  let urlHtml = $derived(highlightMatches(tab.url, urlMatch?.indices));
+  let titleIndices = $derived(result.matches?.find((m) => m.key === "title")?.indices);
+  let urlIndices = $derived(result.matches?.find((m) => m.key === "url")?.indices);
 </script>
 
 <button
@@ -50,9 +48,11 @@
   <Favicon url={tab.favIconUrl} />
 
   <div class="min-w-0 flex-1">
-    <div class="truncate text-[13px] text-[#d4d0c8] leading-snug">{@html titleHtml}</div>
+    <div class="truncate text-[13px] text-[#d4d0c8] leading-snug">
+      <HighlightedText text={tab.title} indices={titleIndices} />
+    </div>
     <div class="truncate text-[11px] text-[#5a5a5a] mt-0.5 leading-snug">
-      {@html urlHtml}
+      <HighlightedText text={tab.url} indices={urlIndices} />
     </div>
   </div>
 
