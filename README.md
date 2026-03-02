@@ -1,4 +1,4 @@
-# tabber
+# chrome-tabber
 
 To install dependencies:
 
